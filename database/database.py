@@ -14,6 +14,7 @@ class Database:
         return dict(
             id = id,
             _id=int(id),
+            prefix=None,
             ban_status=dict(
                 is_banned=False,
                 ban_duration=0,
@@ -75,5 +76,12 @@ class Database:
     async def get_all_banned_users(self):
         banned_users = self.col.find({"ban_status.is_banned": True})
         return banned_users
+
+    async def set_prefix(self, id, prefix):
+        await self.col.update_one({'_id': int(id)}, {'$set': {'prefix': prefix}})
+
+    async def get_prefix(self, id):
+        user = await self.col.find_one({'_id': int(id)})
+        return user.get('prefix', None)
 
 db = Database(Config.DATABASE_URL, Config.DATABASE_NAME)
