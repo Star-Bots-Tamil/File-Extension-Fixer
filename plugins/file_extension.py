@@ -6,6 +6,8 @@ async def file_extension_fixer(client, message):
     user_text = message.text
     prefix = await db.get_prefix(message.from_user.id)
     if prefix:
-        user_text = f"{prefix}{user_text}"
+        user_text = f"{prefix} - {user_text}"
+    else:
+        user_text = f"{user_text}"
     first_60_letters = user_text[:60]
     await client.send_message(message.chat.id, f"`{first_60_letters}.mkv`")
