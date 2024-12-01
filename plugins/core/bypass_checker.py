@@ -65,17 +65,12 @@ async def direct_link_checker1(link, onlylink=False):
 
 async def process_link_and_send(client, user_id, link):
     try:
-        # Process link and extract torrent links
-        torrent_links = await direct_link_checker1(link)
-        user_id = 1391556668
-        bot = Bot()
-        await bot.start()  # Make sure both bot and user_client are running
-        user_client = bot.user_client
-        # Send each torrent link to the group/channel using user_client
-        await user_client.start()  # Start user_client
+        # Process the link and extract torrent links
+        torrent_links = await direct_link_checker(link)
+
+        # Send each torrent link to the group/channel directly using `client`
         for torrent_link in torrent_links:
-            await user_client.send_message(CHAT_ID, f"/qbleech {torrent_link}")
-        await user_client.stop()  # Stop user_client
+            await client.send_message(CHAT_ID, f"/qbleech {torrent_link}")
 
         # Send confirmation to the user
         await client.send_message(user_id, "Torrent links have been successfully sent to the group/channel!")
